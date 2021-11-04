@@ -22,6 +22,7 @@ app.use("/images", express.static(path.join(__dirname, "images")))
 app.use("/users", userRoutes)
 app.use("/locations", locationRoutes)
 
+
 mongoose.connect(URI, (err) => {
     if (err) {
         console.log(`Error while connecting to ${URI}`)
