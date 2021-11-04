@@ -9,17 +9,19 @@ const MIME_TYPES = {
 const avatarStorage = multer.diskStorage({
     destination: "images/avatars",
     filename: (req, file, cb) => {
-        const name = file.originalname.split(" ").join("_")
+        const nameWithoutSpace = file.originalname.split(" ").join("_")
+        const name = nameWithoutSpace.split(".")
         const ext = MIME_TYPES[file.mimetype]
-        cb(null, name + Date.now() + "." + ext)
+        cb(null, name[name.length - 2] + Date.now() + "." + ext)
     }
 })
 const locationStorage = multer.diskStorage({
     destination: "images/locations",
     filename: (req, file, cb) => {
-        const name = file.originalname.split(" ").join("_")
+        const nameWithoutSpace = file.originalname.split(" ").join("_")
+        const name = nameWithoutSpace.split(".")
         const ext = MIME_TYPES[file.mimetype]
-        cb(null, name + Date.now() + "." + ext)
+        cb(null, name[name.length - 2] + Date.now() + "." + ext)
     }
 })
 

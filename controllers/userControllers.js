@@ -13,20 +13,21 @@ const getOneProfile = (req, res) => {
 }
 
 const modifyUserProfile = (req, res) => {
-    console.log(`req.file`, req.file)
-    console.log(`req.body.thing`, req.body.thing)
-    console.log(`req.file.filename`, req.filename)
+    // ADDING imageUrl saving logic
+    // console.log(`req.file`, req.file)
+    // console.log(`req.body.thing`, req.body.thing)
+    // console.log(`req.file.filename`, req.filename)
+    // const userObject = req.file ? {
+    //     ...JSON.parse(req.body.thing),
+    //     avatar: `/avatars/${req.file.filename}`
+    // } : {
+    //     ...req.body
+    // }
 
-    const userObject = req.file ? {
-        ...JSON.parse(req.body.thing),
-        avatar: `/avatars/${req.file.filename}`
-    } : {
-        ...req.body
-    }
     User.updateOne({
             _id: req.params.id
         }, {
-            ...userObject,
+            ...req.body,
             _id: req.params.id
         })
         .then(() => res.status(200).json({
