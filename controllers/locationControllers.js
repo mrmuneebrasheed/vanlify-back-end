@@ -2,8 +2,14 @@ const mongoose = require("mongoose")
 const Location = require("../models/Location")
 
 const getAllLocations = (req, res) => {
-
+    Location.find()
+        .then(locations => res.status(200).json(locations))
+        .catch(err => {
+            console.log(err)
+            res.status(500).json(err)
+        })
 }
+
 const getOneLocation = (req, res) => {
 
 }
