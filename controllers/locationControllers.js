@@ -1,4 +1,5 @@
 const mongoose = require("mongoose")
+const Location = require("../models/Location")
 
 const getAllLocations = (req, res) => {
 
