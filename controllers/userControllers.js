@@ -2,10 +2,30 @@ const mongoose = require("mongoose")
 const User = require("../models/User")
 
 const getOneProfile = (req, res) => {
-
+    User.findOne({
+            _id: req.params.id
+        })
+        .then(user => res.status(200).json(user))
+        .catch(err => {
+            console.error(err)
+            res.status(500).json(err)
+        })
 }
 
 const modifyUserProfile = (req, res) => {
+    User.updateOne({
+            _id: req.params.id
+        }, {
+            ...req.body,
+            _id: req.params.id
+        })
+        .then(() => res.status(200).json({
+            message: "User modified"
+        }))
+        .catch(err => {
+            console.error(err)
+            res.status(500).json(err)
+        })
 
 }
 
@@ -23,7 +43,23 @@ const handleSignup = (req, res) => {
 
 
 const handleLogin = (req, res) => {
-
+    User.findOne({
+            username: req.body.username
+        })
+        .then(user => {
+            if (user.password !== req.body.password) {
+                res.status(403).json({
+                    error: "Incorrect password"
+                })
+            }
+            res.status(200).json({
+                userId: user._id
+            })
+        })
+        .catch(err => {
+            console.error(err)
+            res.status(500).json(err)
+        })
 }
 
 module.exports = {
