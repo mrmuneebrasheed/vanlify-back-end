@@ -5,7 +5,10 @@ const locationSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    coordinates: Object,
+    coordinates: {
+        type: Object,
+        required: true
+    },
     images: {
         type: Array,
         required: true
@@ -19,4 +22,4 @@ const locationSchema = new mongoose.Schema({
     comments: Array
 })
 
-module.exports = mongoose.model("User", locationSchema)
+module.exports = mongoose.model("Location", locationSchema)
