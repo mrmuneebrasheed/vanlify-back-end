@@ -1,10 +1,11 @@
 const mongoose = require("mongoose")
 
 const locationSchema = new mongoose.Schema({
-    coordinates: {
-        lat: String,
-        lng: String
+    title: {
+        type: String,
+        required: true
     },
+    coordinates: Object,
     images: {
         type: Array,
         required: true
