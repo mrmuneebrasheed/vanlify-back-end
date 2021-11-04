@@ -14,6 +14,7 @@ const avatarStorage = multer.diskStorage({
         const ext = MIME_TYPES[file.mimetype]
         cb(null, name[name.length - 2] + Date.now() + "." + ext)
     }
+
 })
 const locationStorage = multer.diskStorage({
     destination: "images/locations",

@@ -29,10 +29,12 @@ const modifyUserProfile = (req, res) => {
 }
 
 const modifyAvatar = (req, res) => {
+    console.log(`req.file`, req.file)
+
     User.updateOne({
             _id: req.params.id
         }, {
-            avatar: req.file.filename
+            avatar: `/avatar/${req.file.filename}`
         })
         .then(() => res.status(200).json({
             message: "avatar modified"
