@@ -3,6 +3,7 @@ const Location = require("../models/Location")
 
 const getAllLocations = (req, res) => {
     Location.find()
+<<<<<<< HEAD
         .then(locations => {
             res.status(200).json(locations)
         })  
@@ -11,8 +12,15 @@ const getAllLocations = (req, res) => {
             res.status(500).json({
                 error: err
             })
+=======
+        .then(locations => res.status(200).json(locations))
+        .catch(err => {
+            console.log(err)
+            res.status(500).json(err)
+>>>>>>> 3223ef5cf481a3627b64eb4f538a44ed19b0a01b
         })
 }
+
 const getOneLocation = (req, res) => {
 
 }
