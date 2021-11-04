@@ -13,7 +13,6 @@ const {
 const userRoutes = require("./routes/userRoutes")
 const locationRoutes = require("./routes/locationRoutes")
 
-const Location = require("./models/Location")
 
 app.use(cors())
 app.use(express.json())
@@ -21,20 +20,8 @@ app.use(express.urlencoded({
     extended: false
 }))
 app.use("/images", express.static(path.join(__dirname, "images")))
-// app.use("/users", userRoutes)
-// app.use("/locations", locationRoutes)
-
-const location = new Location({
-    title: "Parc naturel du Morvan",
-    coordinate: {
-        lat: 47.27555682805901,
-        lng: 4.098141813360119
-    },
-    images: ["/locations/morvan1", "/locations/morvan2", "/locations/morvan3"],
-    userId: "6183ae29fa3287412cc0cbaf"
-})
-
-location.save()
+app.use("/users", userRoutes)
+app.use("/locations", locationRoutes)
 
 
 mongoose.connect(URI, (err) => {
