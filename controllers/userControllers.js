@@ -55,8 +55,7 @@ const handleSignup = (req, res) => {
     const user = new User({
         ...req.body,
     });
-    user
-        .save()
+    user.save()
         .then((user) => res.status(200).json(user))
         .catch((err) => {
             console.error(err);
@@ -69,6 +68,7 @@ const handleLogin = (req, res) => {
             username: req.body.username,
         })
         .then((user) => {
+            if (!user) return res.send("username not found");
             if (user.password !== req.body.password) {
                 return res.status(403).json({
                     error: "Incorrect password",
