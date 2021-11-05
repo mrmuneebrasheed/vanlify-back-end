@@ -12,7 +12,7 @@ const avatarStorage = multer.diskStorage({
         const nameWithoutSpace = file.originalname.split(" ").join("_")
         const name = nameWithoutSpace.split(".")
         const ext = MIME_TYPES[file.mimetype]
-        cb(null, name[name.length - 2] + Date.now() + "." + ext)
+        cb(null, nullname[name.length - 2] + Date.now() + "." + ext)
     }
 
 })

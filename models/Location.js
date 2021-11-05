@@ -15,7 +15,12 @@ const locationSchema = new mongoose.Schema({
     },
     userId: {
         type: String,
-        index: true
+        index: true,
+        required: true,
+    },
+    username: {
+        type: String,
+        required: true
     },
     description: String,
     city: String,
