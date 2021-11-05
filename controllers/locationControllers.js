@@ -4,14 +4,20 @@ const Location = require("../models/Location");
 const getAllLocations = (req, res) => {
   Location.find()
     .then((locations) => {
-      if (!locations) res.status(400).json({ error: "Locations do not exist" });
-      res.status(200).json({
+      if (!locations) {
+        return res.status(400).json({
+          error: "Locations introuvables",
+        });
+      }
+      return res.status(200).json({
+        message: "locations trouvés",
         locations: locations,
       });
     })
     .catch((err) => {
       console.error(err);
-      res.status(500).json({
+      return res.status(500).json({
+        message: "Aucune location n'a été trouvé",
         error: err,
       });
     });
@@ -22,15 +28,21 @@ const getOneLocation = (req, res) => {
     _id: req.params.id,
   })
     .then((location) => {
-      if (!location) res.status(400).json({ error: "Location do not exist" });
-      res.status(200).json({
+      if (!location) {
+        return res.status(404).json({
+          error: "Location Introuvable",
+        });
+      }
+      return res.status(200).json({
+        message: "location trouvé",
         location: location,
       });
     })
     .catch((err) => {
       console.error(err);
-      res.status(500).json({
-        err: err,
+      return res.status(500).json({
+        message: "Aucune location n'a été trouvé",
+        error: err,
       });
     });
 };
@@ -41,14 +53,14 @@ const getLocationsOfUser = (req, res) => {
   })
     .then((locations) => {
       if (!locations) return res.status(404).send("Locations Introuvable");
-      res.status(200).json({
-        locations: locations,
+      return res.status(200).json({
         message: "locations trouvés",
+        locations: locations,
       });
     })
     .catch((err) => {
       console.error(err);
-      res.status(500).json({
+      return res.status(500).json({
         message: "Aucune location n'a été trouvé",
         error: err,
       });
@@ -64,8 +76,8 @@ const createOneLocation = (req, res) => {
     .save()
     .then((location) => {
       return res.status(200).json({
-        location: location,
         message: "Location crée",
+        location: location,
       });
     })
     .catch((err) => {
