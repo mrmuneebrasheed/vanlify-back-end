@@ -36,18 +36,21 @@ const getOneLocation = (req, res) => {
 };
 
 const getLocationsOfUser = (req, res) => {
-  Location.findOne({
+  Location.find({
     userId: req.params.userId,
   })
-    .then((location) => {
+    .then((locations) => {
+      if (!locations) return res.status(404).send("Locations Introuvable");
       res.status(200).json({
-        location: location,
+        locations: locations,
+        message: "locations trouvés",
       });
     })
     .catch((err) => {
       console.error(err);
       res.status(500).json({
-        err: err,
+        message: "Aucune location n'a été trouvé",
+        error: err,
       });
     });
 };
@@ -56,13 +59,22 @@ const createOneLocation = (req, res) => {
   const location = new Location({
     ...req.body,
     images: imagesUrl,
-  }).catch((err) => {
-    console.log(err);
-    return res.status(500).json({
-      message: "La location n'a pas pu être crée",
-      error: err,
-    });
   });
+  location
+    .save()
+    .then((location) => {
+      return res.status(200).json({
+        location: location,
+        message: "Location crée",
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+      return res.status(500).json({
+        message: "La location n'a pas pu être crée",
+        error: err,
+      });
+    });
 };
 
 const modifyOneLocation = (req, res) => {
@@ -76,6 +88,7 @@ const modifyOneLocation = (req, res) => {
     }
   )
     .then((location) => {
+      if (!location) return res.status(404).send("Location Introuvable");
       return res.status(200).json({
         message: "Location modifié",
         location: location,
