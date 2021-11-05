@@ -61,19 +61,19 @@ const handleLogin = (req, res) => {
         username: req.body.username,
     })
         .then((user) => {
-            if (!user) return res.status(404).send("username not found");
+            if (!user) return res.send("username not found");
             if (user.password !== req.body.password) {
-                res.status(403).json({
+                return res.status(403).json({
                     error: "Incorrect password",
                 });
             }
-            res.status(200).json({
+            return res.status(200).json({
                 userId: user._id,
             });
         })
         .catch((err) => {
             console.error(err);
-            res.status(500).json(err);
+            return res.status(500).json(err);
         });
 };
 
