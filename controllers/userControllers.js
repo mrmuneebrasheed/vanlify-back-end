@@ -46,6 +46,7 @@ const modifyAvatar = (req, res) => {
 }
 
 const handleSignup = (req, res) => {
+    delete req.body.passwordConfirm
     const user = new User({
         ...req.body
     })

@@ -35,23 +35,28 @@ const getOneLocation = (req, res) => {
 
 const getLocationsOfUser = (req, res) => {
     Location.findOne({
-        userId: req.params.userId
-    })
-    .then(location => {
-        res.status(200).json({
-            location: location
+            userId: req.params.userId
         })
-    })
-    .catch(err => {
-        console.error(err)
-        res.status(500).json({
-            err: err
+        .then(location => {
+            res.status(200).json({
+                location: location
+            })
         })
-    })
+        .catch(err => {
+            console.error(err)
+            res.status(500).json({
+                err: err
+            })
+        })
 }
 const createOneLocation = (req, res) => {
+    console.log(`req.file`, req.file)
+    console.log(`req.body`, req.body)
+
     const location = new Location({
-        ...req.body
+        ...req.body,
+        // images: req.files
+
     })
     location.save()
         .then(location => res.status(200).json(location))
@@ -88,7 +93,7 @@ const deleteOneLocation = (req, res) => {
         })
         .then((location) => {
             if (!location)
-            return res.status(404).send("Location not found");
+                return res.status(404).send("Location not found");
             return res.status(200).json({
                 message: "Location supprimé !",
                 location: location
