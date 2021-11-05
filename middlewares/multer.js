@@ -32,5 +32,5 @@ module.exports = {
     }).single("image"),
     multerArray: multer({
         storage: locationStorage
-    }).array("images")
+    }).array("images", 5)
 }

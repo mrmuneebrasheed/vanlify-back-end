@@ -50,13 +50,12 @@ const getLocationsOfUser = (req, res) => {
         })
 }
 const createOneLocation = (req, res) => {
-    console.log(`req.file`, req.file)
-    console.log(`req.body`, req.body)
-
+    const imagesUrl = req.files.map(file => (
+        `/locations/${file.filename}`
+    ))
     const location = new Location({
         ...req.body,
-        // images: req.files
-
+        images: imagesUrl
     })
     location.save()
         .then(location => res.status(200).json(location))
