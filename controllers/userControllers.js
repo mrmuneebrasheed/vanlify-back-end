@@ -56,6 +56,7 @@ const modifyAvatar = (req, res) => {
 };
 
 const handleSignup = (req, res) => {
+  delete req.body.passwordConfirm;
   const user = new User({
     ...req.body,
   });
@@ -73,19 +74,14 @@ const handleLogin = (req, res) => {
     username: req.body.username,
   })
     .then((user) => {
-      if (!user)
-        return res.status(404).json({ error: "Username do not exist" });
       if (user.password !== req.body.password) {
         return res.status(403).json({
           error: "Incorrect password",
         });
       }
-      return res
-        .status(200)
-        .json({
-          userId: user._id,
-        })
-        .redirect("/users/profile");
+      return res.status(200).json({
+        userId: user._id,
+      });
     })
     .catch((err) => {
       console.error(err);

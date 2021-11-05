@@ -40,7 +40,6 @@ const getLocationsOfUser = (req, res) => {
     userId: req.params.userId,
   })
     .then((location) => {
-      if (!location) res.status(400).json({ error: "Location do not exist" });
       res.status(200).json({
         location: location,
       });
@@ -53,23 +52,17 @@ const getLocationsOfUser = (req, res) => {
     });
 };
 const createOneLocation = (req, res) => {
+  const imagesUrl = req.files.map((file) => `/locations/${file.filename}`);
   const location = new Location({
     ...req.body,
-  });
-  location
-    .save()
-    .then((location) => {
-      return res.status(200).json({
-        location: location,
-      });
-    })
-    .catch((err) => {
-      console.log(err);
-      return res.status(500).json({
-        message: "La location n'a pas pu être crée",
-        error: err,
-      });
+    images: imagesUrl,
+  }).catch((err) => {
+    console.log(err);
+    return res.status(500).json({
+      message: "La location n'a pas pu être crée",
+      error: err,
     });
+  });
 };
 
 const modifyOneLocation = (req, res) => {
