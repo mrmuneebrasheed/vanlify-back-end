@@ -64,12 +64,11 @@ const handleLogin = (req, res) => {
         })
         .then(user => {
             if (user.password !== req.body.password) {
-<<<<<<< HEAD
                 return res.status(403).json({
                     error: "Incorrect password",
                 });
             }
-                return res.status(200).json({
+            return res.status(200).json({
                 userId: user._id,
             });
         })
@@ -78,21 +77,6 @@ const handleLogin = (req, res) => {
             return res.status(500).json(err);
         });
 };
-=======
-                res.status(403).json({
-                    error: "Incorrect password"
-                })
-            }
-            res.status(200).json({
-                userId: user._id
-            })
-        })
-        .catch(err => {
-            console.error(err)
-            res.status(500).json(err)
-        })
-}
->>>>>>> a73a5924afd09740787375a48aa92b4572cee9aa
 
 module.exports = {
     getOneProfile,
