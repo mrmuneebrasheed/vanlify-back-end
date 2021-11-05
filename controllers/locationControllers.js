@@ -7,7 +7,7 @@ const getAllLocations = (req, res) => {
             res.status(200).json({
                 locations: locations
             })
-        })  
+        })
         .catch(err => {
             console.error(err);
             res.status(500).json({
@@ -18,19 +18,19 @@ const getAllLocations = (req, res) => {
 
 const getOneLocation = (req, res) => {
     Location.findOne({
-        _id: req.params.id
-    })
-    .then(location => {
-        res.status(200).json({
-            location: location
+            _id: req.params.id
         })
-    })
-    .catch(err => {
-        console.error(err)
-        res.status(500).json({
-            err: err
+        .then(location => {
+            res.status(200).json({
+                location: location
+            })
         })
-    })
+        .catch(err => {
+            console.error(err)
+            res.status(500).json({
+                err: err
+            })
+        })
 }
 
 const getLocationsOfUser = (req, res) => {
@@ -63,23 +63,23 @@ const createOneLocation = (req, res) => {
 
 const modifyOneLocation = (req, res) => {
     Location.updateOne({
-        _id: req.params.id
-    },{
-        ...req.body,
-        _id: req.params.id
-    })
-    .then(location =>
-        res.status(200).json({
-            message: "Location modifié",
-            location : location
-        }))
-    .catch(err => {
-        console.error(err)
-        res.status(500).json({
-            message: "Erreur: La Location n'a pas pu être modifié",
-            error: err
+            _id: req.params.id
+        }, {
+            ...req.body,
+            _id: req.params.id
         })
-    })
+        .then(location =>
+            res.status(200).json({
+                message: "Location modifié",
+                location: location
+            }))
+        .catch(err => {
+            console.error(err)
+            res.status(500).json({
+                message: "Erreur: La Location n'a pas pu être modifié",
+                error: err
+            })
+        })
 }
 
 const deleteOneLocation = (req, res) => {
