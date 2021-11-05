@@ -73,7 +73,7 @@ const handleLogin = (req, res) => {
         username: req.body.username,
     })
         .then((user) => {
-            if (!user) return res.send("Username not found");
+            if (!user) return res.send("username not found");
             if (user.password !== req.body.password) {
                 return res.status(403).json({
                     error: "Incorrect password",
@@ -88,15 +88,6 @@ const handleLogin = (req, res) => {
             return res.status(500).json(err);
         });
 };
-return res
-    .status(200)
-    .json({
-        userId: user._id,
-    })
-    .catch((err) => {
-        console.error(err);
-        return res.status(500).json(err);
-    });
 
 module.exports = {
     getOneProfile,
