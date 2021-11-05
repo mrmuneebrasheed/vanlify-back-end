@@ -87,21 +87,6 @@ const createOneLocation = (req, res) => {
                 error: err,
             });
         });
-    location
-        .save()
-        .then((location) => {
-            return res.status(200).json({
-                location: location,
-                message: "Location crée",
-            });
-        })
-        .catch((err) => {
-            console.log(err);
-            return res.status(500).json({
-                message: "La location n'a pas pu être crée",
-                error: err,
-            });
-        });
 };
 
 const modifyOneLocation = (req, res) => {
