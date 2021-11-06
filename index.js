@@ -23,6 +23,10 @@ app.use("/images", express.static(path.join(__dirname, "images")))
 app.use("/users", userRoutes)
 app.use("/locations", locationRoutes)
 
+if (!PORT || !URI) {
+    console.log("You need to include .env file. Please contact your lead developper :)")
+    return
+}
 
 mongoose.connect(URI, (err) => {
     if (err) {
