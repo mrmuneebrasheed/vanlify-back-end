@@ -25,8 +25,8 @@ const getAllLocations = (req, res) => {
 
 const getOneLocation = (req, res) => {
     Location.findOne({
-            _id: req.params.id,
-        })
+        _id: req.params.id,
+    })
         .then((location) => {
             if (!location) {
                 return res.status(404).json({
@@ -49,8 +49,8 @@ const getOneLocation = (req, res) => {
 
 const getLocationsOfUser = (req, res) => {
     Location.find({
-            userId: req.params.userId,
-        })
+        userId: req.params.userId,
+    })
         .then((locations) => {
             if (!locations) {
                 return res.status(404).json("Locations Introuvable");
@@ -69,6 +69,7 @@ const getLocationsOfUser = (req, res) => {
         });
 };
 const createOneLocation = (req, res) => {
+    console.log("Adding Location");
     const imagesUrl = req.files.map((file) => `/locations/${file.filename}`);
     const location = new Location({
         ...req.body,
@@ -92,11 +93,14 @@ const createOneLocation = (req, res) => {
 };
 
 const modifyOneLocation = (req, res) => {
-    Location.findOneAndUpdate({
+    Location.findOneAndUpdate(
+        {
             _id: req.params.id,
-        }, {
+        },
+        {
             ...req.body,
-        })
+        }
+    )
         .then((location) => {
             return res.status(200).json({
                 message: "Location modifié",
@@ -114,8 +118,8 @@ const modifyOneLocation = (req, res) => {
 
 const deleteOneLocation = (req, res) => {
     Location.deleteOne({
-            _id: req.params.id,
-        })
+        _id: req.params.id,
+    })
         .then((location) => {
             if (!location) {
                 return res.status(404).json("Location Introuvable");
@@ -135,13 +139,16 @@ const deleteOneLocation = (req, res) => {
 };
 
 const commentOneLocation = (req, res) => {
-    Location.findOneAndUpdate({
+    Location.findOneAndUpdate(
+        {
             _id: req.params.id,
-        }, {
+        },
+        {
             $push: {
                 comments: req.body,
             },
-        })
+        }
+    )
         .then((location) => {
             return res.status(200).json({
                 message: "Commentaire enregistré",
