@@ -3,8 +3,8 @@ const User = require("../models/User");
 
 const getOneProfile = (req, res) => {
     User.findOne({
-        _id: req.params.id,
-    })
+            _id: req.params.id,
+        })
         .then((user) => {
             if (!user) {
                 return res.status(404).json({
@@ -26,15 +26,11 @@ const getOneProfile = (req, res) => {
 };
 
 const modifyUserProfile = (req, res) => {
-    User.findOneAndUpdate(
-        {
+    User.findOneAndUpdate({
             _id: req.params.id,
-        },
-        {
+        }, {
             ...req.body,
-            _id: req.params.id,
-        }
-    )
+        })
         .then((user) => {
             return res.status(200).json({
                 message: "User modifié",
@@ -53,14 +49,11 @@ const modifyUserProfile = (req, res) => {
 const modifyAvatar = (req, res) => {
     console.log(`req.file`, req.file);
 
-    User.updateOne(
-        {
+    User.updateOne({
             _id: req.params.id,
-        },
-        {
+        }, {
             avatar: `/avatar/${req.file.filename}`,
-        }
-    )
+        })
         .then(() => {
             return res.status(200).json({
                 message: "Avatar modifié",
@@ -98,8 +91,8 @@ const handleSignup = (req, res) => {
 
 const handleLogin = (req, res) => {
     User.findOne({
-        username: req.body.username,
-    })
+            username: req.body.username,
+        })
         .then((user) => {
             if (!user) {
                 return res.status(404).json({
