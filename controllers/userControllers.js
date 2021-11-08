@@ -26,6 +26,7 @@ const getOneProfile = (req, res) => {
 };
 
 const modifyUserProfile = (req, res) => {
+    console.log("Modifying profile");
     User.findOneAndUpdate(
         {
             _id: req.params.id,
