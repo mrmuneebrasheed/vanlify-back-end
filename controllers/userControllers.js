@@ -5,15 +5,28 @@ const getOneProfile = (req, res) => {
     User.findOne({
         _id: req.params.id,
     })
-        .then((user) => res.status(200).json(user))
+        .then((user) => {
+            if (!user) {
+                return res.status(404).json({
+                    error: "Utilisateur n'existe pas",
+                });
+            }
+            return res.status(200).json({
+                message: "Utilisateur trouvé",
+                user: user,
+            });
+        })
         .catch((err) => {
             console.error(err);
-            res.status(500).json(err);
+            return res.status(500).json({
+                message: "L'utilisateur n'a pas pu être trouvé",
+                error: err,
+            });
         });
 };
 
 const modifyUserProfile = (req, res) => {
-    User.updateOne(
+    User.findOneAndUpdate(
         {
             _id: req.params.id,
         },
@@ -22,14 +35,18 @@ const modifyUserProfile = (req, res) => {
             _id: req.params.id,
         }
     )
-        .then(() =>
-            res.status(200).json({
-                message: "User modified",
-            })
-        )
+        .then((user) => {
+            return res.status(200).json({
+                message: "User modifié",
+                user: user,
+            });
+        })
         .catch((err) => {
             console.error(err);
-            res.status(500).json(err);
+            return res.status(500).json({
+                message: "L'utilisateur n'a pas pu être modifié",
+                error: err,
+            });
         });
 };
 
@@ -44,14 +61,17 @@ const modifyAvatar = (req, res) => {
             avatar: `/avatar/${req.file.filename}`,
         }
     )
-        .then(() =>
-            res.status(200).json({
-                message: "avatar modified",
-            })
-        )
+        .then(() => {
+            return res.status(200).json({
+                message: "Avatar modifié",
+            });
+        })
         .catch((err) => {
             console.error(err);
-            res.status(500).json(err);
+            return res.status(500).json({
+                message: "L'avatar n'a pas pu être modifié",
+                error: err,
+            });
         });
 };
 
@@ -61,10 +81,18 @@ const handleSignup = (req, res) => {
         ...req.body,
     });
     user.save()
-        .then((user) => res.status(200).json(user))
+        .then((user) => {
+            return res.status(200).json({
+                message: "Utilisateur crée",
+                user: user,
+            });
+        })
         .catch((err) => {
             console.error(err);
-            res.status(500).json(err);
+            return res.status(500).json({
+                message: "L'utilisateur n'a pas pu être crée",
+                error: err,
+            });
         });
 };
 
@@ -73,16 +101,27 @@ const handleLogin = (req, res) => {
         username: req.body.username,
     })
         .then((user) => {
-            if (!user) throw new Error("User does not exist");
+            if (!user) {
+                return res.status(404).json({
+                    error: "Utilisateur introuvable",
+                });
+            }
             if (user.password !== req.body.password) {
-                throw new Error("Password not valid");
+                return res.status(403).json({
+                    error: "Incorrect password",
+                });
             }
             return res.status(200).json({
+                message: "Utilisateur trouvé",
                 userId: user._id,
             });
         })
         .catch((err) => {
-            return res.status(404).json({ error: err.message });
+            console.error(err);
+            return res.status(500).json({
+                message: "L'utilisateur n'a pas pu être trouvé",
+                error: err,
+            });
         });
 };
 
