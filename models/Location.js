@@ -24,6 +24,7 @@ const locationSchema = new mongoose.Schema({
     },
     description: String,
     city: String,
+    type: String,
     comments: Array
 })
 
