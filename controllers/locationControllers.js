@@ -75,7 +75,9 @@ const createOneLocation = (req, res) => {
   delete req.body.coordinates;
   console.log(`req.body`, req.body);
   console.log(`coordinatesObject`, coordinatesObject);
-  const imagesUrl = req.files.map((file) => `/locations/${file.filename}`);
+  const imagesUrl = req.files.map(
+    (file) => `/images/locations/${file.filename}`
+  );
   const location = new Location({
     ...req.body,
     coordinates: coordinatesObject,
