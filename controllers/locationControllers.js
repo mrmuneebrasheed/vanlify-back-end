@@ -71,6 +71,7 @@ const getLocationsOfUser = (req, res) => {
 const createOneLocation = (req, res) => {
     console.log("Adding Location");
     console.log(req.files);
+    console.log(typeof req.body);
     const imagesUrl = req.files?.map((file) => `/locations/${file.filename}`);
     const location = new Location({
         ...req.body,
