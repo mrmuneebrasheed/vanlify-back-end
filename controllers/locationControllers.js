@@ -71,7 +71,6 @@ const getLocationsOfUser = (req, res) => {
 const createOneLocation = (req, res) => {
     console.log("Adding Location");
     console.log(req.files);
-    console.log(typeof req.body);
     const imagesUrl = req.files?.map((file) => `/locations/${file.filename}`);
     const location = new Location({
         ...req.body,
@@ -117,7 +116,6 @@ const modifyOneLocation = (req, res) => {
             });
         });
 };
-
 const deleteOneLocation = (req, res) => {
     Location.deleteOne({
         _id: req.params.id,
@@ -139,7 +137,6 @@ const deleteOneLocation = (req, res) => {
             });
         });
 };
-
 const commentOneLocation = (req, res) => {
     Location.findOneAndUpdate(
         {

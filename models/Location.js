@@ -6,9 +6,16 @@ const locationSchema = new mongoose.Schema({
         required: true,
     },
     coordinates: {
-        lat: Number,
-        lng: Number
+        lat: {
+            type: Number,
+            required: true,
+        },
+        lng: {
+            type: Number,
+            required: true,
+        },
     },
+    required: true,
     images: {
         type: Array,
         required: true,
