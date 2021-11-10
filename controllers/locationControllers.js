@@ -25,8 +25,13 @@ const getAllLocations = (req, res) => {
 
 const getOneLocation = (req, res) => {
     Location.findOne({
+<<<<<<< HEAD
         _id: req.params.id,
     })
+=======
+            _id: req.params.id,
+        })
+>>>>>>> 2afb58f7b461e92b30bec315f93f3da9a9efda86
         .then((location) => {
             if (!location) {
                 return res.status(404).json({
@@ -49,8 +54,13 @@ const getOneLocation = (req, res) => {
 
 const getLocationsOfUser = (req, res) => {
     Location.find({
+<<<<<<< HEAD
         userId: req.params.userId,
     })
+=======
+            userId: req.params.userId,
+        })
+>>>>>>> 2afb58f7b461e92b30bec315f93f3da9a9efda86
         .then((locations) => {
             if (!locations) {
                 return res.status(404).json("Locations Introuvable");
@@ -70,10 +80,21 @@ const getLocationsOfUser = (req, res) => {
 };
 const createOneLocation = (req, res) => {
     console.log("Adding Location");
+<<<<<<< HEAD
     console.log(req.files);
     const imagesUrl = req.files?.map((file) => `/locations/${file.filename}`);
     const location = new Location({
         ...req.body,
+=======
+    const coordinatesObject = JSON.parse(req.body.coordinates)
+    delete req.body.coordinates
+    console.log(`req.body`, req.body)
+    console.log(`coordinatesObject`, coordinatesObject)
+    const imagesUrl = req.files.map((file) => `/locations/${file.filename}`);
+    const location = new Location({
+        ...req.body,
+        coordinates: coordinatesObject,
+>>>>>>> 2afb58f7b461e92b30bec315f93f3da9a9efda86
         images: imagesUrl,
     });
     location
@@ -94,6 +115,7 @@ const createOneLocation = (req, res) => {
 };
 
 const modifyOneLocation = (req, res) => {
+<<<<<<< HEAD
     Location.findOneAndUpdate(
         {
             _id: req.params.id,
@@ -102,6 +124,13 @@ const modifyOneLocation = (req, res) => {
             ...req.body,
         }
     )
+=======
+    Location.findOneAndUpdate({
+            _id: req.params.id,
+        }, {
+            ...req.body,
+        })
+>>>>>>> 2afb58f7b461e92b30bec315f93f3da9a9efda86
         .then((location) => {
             return res.status(200).json({
                 message: "Location modifié",
@@ -116,6 +145,7 @@ const modifyOneLocation = (req, res) => {
             });
         });
 };
+<<<<<<< HEAD
 
 const deleteOneLocation = (req, res) => {
     Location.deleteOne({
@@ -150,6 +180,36 @@ const commentOneLocation = (req, res) => {
             },
         }
     )
+=======
+Location.deleteOne({
+        _id: req.params.id,
+    })
+    .then((location) => {
+        if (!location) {
+            return res.status(404).json("Location Introuvable");
+        }
+        return res.status(200).json({
+            message: "Location supprimé !",
+            location: location,
+        });
+    })
+    .catch((err) => {
+        console.error(err);
+        return res.status(500).json({
+            message: "La location n'a pas pu être supprimé",
+            error: err,
+        });
+    });
+
+const commentOneLocation = (req, res) => {
+    Location.findOneAndUpdate({
+            _id: req.params.id,
+        }, {
+            $push: {
+                comments: req.body,
+            },
+        })
+>>>>>>> 2afb58f7b461e92b30bec315f93f3da9a9efda86
         .then((location) => {
             return res.status(200).json({
                 message: "Commentaire enregistré",
@@ -173,4 +233,8 @@ module.exports = {
     modifyOneLocation,
     deleteOneLocation,
     commentOneLocation,
+<<<<<<< HEAD
 };
+=======
+};
+>>>>>>> 2afb58f7b461e92b30bec315f93f3da9a9efda86
