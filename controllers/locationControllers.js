@@ -56,18 +56,38 @@ const getLocationsOfUser = (req, res) => {
         return res.status(404).json("Locations Introuvable");
       }
       return res.status(200).json({
-        message: "locations trouvés",
+        message: "Locations foud",
         locations: locations,
       });
     })
     .catch((err) => {
       console.error(err);
       return res.status(500).json({
-        message: "Les ou la locations n'a pas pu être trouvé",
+        message: "The locations couldn't be found",
         error: err,
       });
     });
 };
+
+const getLocationsByType = (req, res) => {
+  Locations.find({ type: req.params.type })
+    .then((locations) => {
+      if (!locations) {
+        return res.status(404).json("No location of this type");
+      }
+      return res.status(200).json({
+        message: "Locations found",
+        locations: locations,
+      });
+    })
+    .catch((err) => {
+      console.error(err);
+      return res.status(500).json({
+        message: "The locations couldn't be found",
+      });
+    });
+};
+
 const createOneLocation = (req, res) => {
   console.log("Adding Location");
   console.log(req.body.coordinates);
@@ -83,6 +103,21 @@ const createOneLocation = (req, res) => {
     coordinates: coordinatesObject,
     images: imagesUrl,
   });
+  location
+    .save()
+    .then((location) => {
+      return res.status(200).json({
+        message: "Location crée",
+        location: location,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+      return res.status(500).json({
+        message: "La location n'a pas pu être crée",
+        error: err,
+      });
+    });
 };
 
 const modifyOneLocation = (req, res) => {
@@ -96,35 +131,36 @@ const modifyOneLocation = (req, res) => {
   )
     .then((location) => {
       return res.status(200).json({
-        message: "Location modifié",
+        message: "Location modified",
         location: location,
       });
     })
     .catch((err) => {
       console.error(err);
       return res.status(500).json({
-        message: "La Location n'a pas pu être modifié",
+        message: "Location couldn't be modified",
         error: err,
       });
     });
 };
+
 const deleteOneLocation = (req, res) => {
   Location.deleteOne({
     _id: req.params.id,
   })
     .then((location) => {
       if (!location) {
-        return res.status(404).json("Location Introuvable");
+        return res.status(404).json("Location not found");
       }
       return res.status(200).json({
-        message: "Location supprimé !",
+        message: "Location deleted",
         location: location,
       });
     })
     .catch((err) => {
       console.error(err);
       return res.status(500).json({
-        message: "La location n'a pas pu être supprimé",
+        message: "Location couldn't be deleted",
         error: err,
       });
     });
@@ -142,14 +178,14 @@ const commentOneLocation = (req, res) => {
   )
     .then((location) => {
       return res.status(200).json({
-        message: "Commentaire enregistré",
+        message: "Comment saved",
         location: location,
       });
     })
     .catch((err) => {
       console.error(err);
       return res.status(500).json({
-        message: "Le commentaire n'a pas pu être enregistré",
+        message: "Comment couldn't be saved",
         error: err,
       });
     });
@@ -159,6 +195,7 @@ module.exports = {
   getAllLocations,
   getOneLocation,
   getLocationsOfUser,
+  getLocationsByType,
   createOneLocation,
   modifyOneLocation,
   deleteOneLocation,

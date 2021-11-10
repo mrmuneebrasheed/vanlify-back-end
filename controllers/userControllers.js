@@ -51,8 +51,11 @@ const modifyUserProfile = (req, res) => {
 };
 
 const modifyAvatar = (req, res) => {
-  console.log(`req.file`, req.file);
-
+  if (!req.file) {
+    return res.status(400).json({
+      message: "Please provide an image",
+    });
+  }
   User.updateOne(
     {
       _id: req.params.id,
