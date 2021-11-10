@@ -116,6 +116,7 @@ const modifyOneLocation = (req, res) => {
             });
         });
 };
+
 const deleteOneLocation = (req, res) => {
     Location.deleteOne({
         _id: req.params.id,
@@ -137,6 +138,7 @@ const deleteOneLocation = (req, res) => {
             });
         });
 };
+
 const commentOneLocation = (req, res) => {
     Location.findOneAndUpdate(
         {
