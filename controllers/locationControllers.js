@@ -70,6 +70,7 @@ const getLocationsOfUser = (req, res) => {
 };
 const createOneLocation = (req, res) => {
   console.log("Adding Location");
+  console.log(req.body.coordinates);
   const coordinatesObject = JSON.parse(req.body.coordinates);
   delete req.body.coordinates;
   console.log(`req.body`, req.body);
@@ -80,21 +81,6 @@ const createOneLocation = (req, res) => {
     coordinates: coordinatesObject,
     images: imagesUrl,
   });
-  location
-    .save()
-    .then((location) => {
-      return res.status(200).json({
-        message: "Location crée",
-        location: location,
-      });
-    })
-    .catch((err) => {
-      console.log(err);
-      return res.status(500).json({
-        message: "La location n'a pas pu être crée",
-        error: err,
-      });
-    });
 };
 
 const modifyOneLocation = (req, res) => {
@@ -141,7 +127,6 @@ const deleteOneLocation = (req, res) => {
       });
     });
 };
-
 const commentOneLocation = (req, res) => {
   Location.findOneAndUpdate(
     {
