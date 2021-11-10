@@ -23,7 +23,7 @@ const locationSchema = new mongoose.Schema({
         required: true,
     },
     description: String,
-    city: String,
+    address: String,
     type: String,
     comments: Array,
 });
