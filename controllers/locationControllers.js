@@ -74,7 +74,8 @@ const getLocationsOfUser = (req, res) => {
 
 const getLocationsByType = (req, res) => {
   console.log("Get locations by type");
-  Location.find({ type: req.params.type })
+  const type = req.params.type.split(" ").join().toLowerCase();
+  Location.find({ type: type })
     .then((locations) => {
       if (!locations) {
         return res.status(404).json("No location of this type");
@@ -95,7 +96,9 @@ const getLocationsByType = (req, res) => {
 const createOneLocation = (req, res) => {
   console.log("Creating Location");
   const coordinatesObject = JSON.parse(req.body.coordinates);
+  const type = req.body.type.split(" ").join().toLowerCase();
   delete req.body.coordinates;
+  delete req.body.type;
   if (!req.files) {
     return res.status(400).json({
       message: "You need to provide at least one image",
@@ -107,6 +110,7 @@ const createOneLocation = (req, res) => {
   const location = new Location({
     ...req.body,
     coordinates: coordinatesObject,
+    type: type,
     images: imagesUrl,
   });
   location
