@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const User = require("../models/User");
 
 const getOneProfile = (req, res) => {
+  console.log("Get one profile");
   User.findOne({
     _id: req.params.id,
   })
@@ -51,6 +52,7 @@ const modifyUserProfile = (req, res) => {
 };
 
 const modifyAvatar = (req, res) => {
+  console.log("Modifying avatar");
   if (!req.file) {
     return res.status(400).json({
       message: "Please provide an image",
@@ -79,6 +81,7 @@ const modifyAvatar = (req, res) => {
 };
 
 const handleSignup = (req, res) => {
+  console.log("Handle signup");
   delete req.body.passwordConfirm;
   const user = new User({
     ...req.body,
@@ -101,6 +104,7 @@ const handleSignup = (req, res) => {
 };
 
 const handleLogin = (req, res) => {
+  console.log("Handle login");
   User.findOne({
     username: req.body.username,
   })

@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const Location = require("../models/Location");
 
 const getAllLocations = (req, res) => {
+  console.log("Get all locations");
   Location.find()
     .then((locations) => {
       if (!locations) {
@@ -24,6 +25,7 @@ const getAllLocations = (req, res) => {
 };
 
 const getOneLocation = (req, res) => {
+  console.log("Get one location");
   Location.findOne({
     _id: req.params.id,
   })
@@ -48,6 +50,7 @@ const getOneLocation = (req, res) => {
 };
 
 const getLocationsOfUser = (req, res) => {
+  console.log("Get locations of user");
   Location.find({
     userId: req.params.userId,
   })
@@ -70,7 +73,8 @@ const getLocationsOfUser = (req, res) => {
 };
 
 const getLocationsByType = (req, res) => {
-  Locations.find({ type: req.params.type })
+  console.log("Get locations by type");
+  Location.find({ type: req.params.type })
     .then((locations) => {
       if (!locations) {
         return res.status(404).json("No location of this type");
@@ -89,12 +93,14 @@ const getLocationsByType = (req, res) => {
 };
 
 const createOneLocation = (req, res) => {
-  console.log("Adding Location");
-  console.log(req.body.coordinates);
+  console.log("Creating Location");
   const coordinatesObject = JSON.parse(req.body.coordinates);
   delete req.body.coordinates;
-  console.log(`req.body`, req.body);
-  console.log(`coordinatesObject`, coordinatesObject);
+  if (!req.files) {
+    return res.status(400).json({
+      message: "You need to provide at least one image",
+    });
+  }
   const imagesUrl = req.files.map(
     (file) => `/images/locations/${file.filename}`
   );
@@ -121,6 +127,7 @@ const createOneLocation = (req, res) => {
 };
 
 const modifyOneLocation = (req, res) => {
+  console.log("Modify Location");
   Location.findOneAndUpdate(
     {
       _id: req.params.id,
@@ -145,6 +152,7 @@ const modifyOneLocation = (req, res) => {
 };
 
 const deleteOneLocation = (req, res) => {
+  console.log("Delete Location");
   Location.deleteOne({
     _id: req.params.id,
   })
@@ -166,6 +174,7 @@ const deleteOneLocation = (req, res) => {
     });
 };
 const commentOneLocation = (req, res) => {
+  console.log("Comment one location");
   Location.findOneAndUpdate(
     {
       _id: req.params.id,
