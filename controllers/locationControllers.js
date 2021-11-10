@@ -117,25 +117,27 @@ const modifyOneLocation = (req, res) => {
             });
         });
 };
-Location.deleteOne({
-        _id: req.params.id,
-    })
-    .then((location) => {
-        if (!location) {
-            return res.status(404).json("Location Introuvable");
-        }
-        return res.status(200).json({
-            message: "Location supprimé !",
-            location: location,
-        });
-    })
-    .catch((err) => {
-        console.error(err);
-        return res.status(500).json({
-            message: "La location n'a pas pu être supprimé",
-            error: err,
-        });
-    });
+const deleteOneLocation = (req, res) => {
+    Location.deleteOne({
+            _id: req.params.id,
+        })
+        .then((location) => {
+            if (!location) {
+                return res.status(404).json("Location Introuvable");
+            }
+            return res.status(200).json({
+                message: "Location supprimé !",
+                location: location,
+            });
+        })
+        .catch((err) => {
+            console.error(err);
+            return res.status(500).json({
+                message: "La location n'a pas pu être supprimé",
+                error: err,
+            });
+        })
+}
 
 const commentOneLocation = (req, res) => {
     Location.findOneAndUpdate({
