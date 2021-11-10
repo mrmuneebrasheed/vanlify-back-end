@@ -15,7 +15,6 @@ const locationSchema = new mongoose.Schema({
             required: true,
         },
     },
-    required: true,
     images: {
         type: Array,
         required: true,
