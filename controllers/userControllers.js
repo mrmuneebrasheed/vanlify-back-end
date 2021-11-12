@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const User = require("../models/User");
+const fs = require("fs")
+const path = require("path")
 
 const getOneProfile = (req, res) => {
     console.log("Get one profile");
@@ -55,6 +57,37 @@ const modifyAvatar = (req, res) => {
             message: "Please provide an image",
         });
     }
+    // User.findById(req.params.id, {
+    //         avatar: 1
+    //     })
+    //     .then(async (user) => {
+    //         const avatar = user.avatar
+    //         if (avatar && avatar.length !== 0) {
+    //             await fs.unlink(path.join(__dirname, "../" + avatar), (err) => {
+    //                 console.error(err)
+    //                 return res.status(500).json(err)
+    //             })
+    //         }
+    //         User.updateOne({
+    //                 _id: req.params.id,
+    //             }, {
+    //                 $set: {
+    //                     avatar: `/images/avatars/${req.file.filename}`,
+    //                 }
+    //             })
+    //             .then(() => {
+    //                 return res.status(200).json({
+    //                     message: "Avatar modifié",
+    //                 });
+    //             })
+    //             .catch((err) => {
+    //                 console.error(err);
+    //                 return res.status(500).json({
+    //                     message: "L'avatar n'a pas pu être modifié",
+    //                     error: err,
+    //                 });
+    //             });
+    //     })
     User.updateOne({
             _id: req.params.id,
         }, {
