@@ -1,7 +1,10 @@
 const mongoose = require("mongoose");
 const User = require("../models/User");
 const fs = require("fs")
-const path = require("path")
+const path = require("path");
+const {
+    report
+} = require("../routes/locationRoutes");
 
 const getOneProfile = (req, res) => {
     console.log("Get one profile");
@@ -62,7 +65,7 @@ const modifyAvatar = async (req, res) => {
             // });
         }
         const oldUser = await User.findOneAndUpdate({
-            _id: userId
+            _id: req.params.id
         }, {
             $set: {
                 avatar: `/images/avatars/${req.file.filename}`
@@ -70,8 +73,22 @@ const modifyAvatar = async (req, res) => {
         }, {
             new: false
         })
-        const oldAvatar = oldUser.avatar
-        fs.unlink(path.join(__dirname, "../" + oldAvatar))
+        if (oldUser.avatar) {
+            const oldAvatar = path.join(__dirname, "../" + oldUser.avatar)
+            // console.log("oldAvatar", oldAvatar)
+            fs.unlink(oldAvatar, (err) => {
+                if (err) {
+                    throw err
+                }
+                return res.status(200).json({
+                    message: "Avatar modified"
+                })
+            })
+        } else {
+            res.status(200).json({
+                message: "Avatar modified"
+            })
+        }
     } catch (err) {
         console.error(err)
         if (err.code === 400) {
@@ -84,56 +101,56 @@ const modifyAvatar = async (req, res) => {
 
 
 
-    User.findById(req.params.id, {
-            avatar: 1
-        })
-        .then(async (user) => {
-            const avatar = user.avatar
-            if (avatar && avatar.length !== 0) {
-                await fs.unlink(path.join(__dirname, "../" + avatar), (err) => {
-                    console.error(err)
-                    return res.status(500).json(err)
-                })
-            }
-            User.updateOne({
-                    _id: req.params.id,
-                }, {
-                    $set: {
-                        avatar: `/images/avatars/${req.file.filename}`,
-                    }
-                })
-                .then(() => {
-                    return res.status(200).json({
-                        message: "Avatar modifié",
-                    });
-                })
-                .catch((err) => {
-                    console.error(err);
-                    return res.status(500).json({
-                        message: "L'avatar n'a pas pu être modifié",
-                        error: err,
-                    });
-                });
-        })
-    User.updateOne({
-            _id: req.params.id,
-        }, {
-            $set: {
-                avatar: `/images/avatars/${req.file.filename}`,
-            }
-        })
-        .then(() => {
-            return res.status(200).json({
-                message: "Avatar modifié",
-            });
-        })
-        .catch((err) => {
-            console.error(err);
-            return res.status(500).json({
-                message: "L'avatar n'a pas pu être modifié",
-                error: err,
-            });
-        });
+    // User.findById(req.params.id, {
+    //         avatar: 1
+    //     })
+    //     .then(async (user) => {
+    //         const avatar = user.avatar
+    //         if (avatar && avatar.length !== 0) {
+    //             await fs.unlink(path.join(__dirname, "../" + avatar), (err) => {
+    //                 console.error(err)
+    //                 return res.status(500).json(err)
+    //             })
+    //         }
+    //         User.updateOne({
+    //                 _id: req.params.id,
+    //             }, {
+    //                 $set: {
+    //                     avatar: `/images/avatars/${req.file.filename}`,
+    //                 }
+    //             })
+    //             .then(() => {
+    //                 return res.status(200).json({
+    //                     message: "Avatar modifié",
+    //                 });
+    //             })
+    //             .catch((err) => {
+    //                 console.error(err);
+    //                 return res.status(500).json({
+    //                     message: "L'avatar n'a pas pu être modifié",
+    //                     error: err,
+    //                 });
+    //             });
+    //     })
+    // User.updateOne({
+    //         _id: req.params.id,
+    //     }, {
+    //         $set: {
+    //             avatar: `/images/avatars/${req.file.filename}`,
+    //         }
+    //     })
+    //     .then(() => {
+    //         return res.status(200).json({
+    //             message: "Avatar modifié",
+    //         });
+    //     })
+    //     .catch((err) => {
+    //         console.error(err);
+    //         return res.status(500).json({
+    //             message: "L'avatar n'a pas pu être modifié",
+    //             error: err,
+    //         });
+    //     });
 };
 
 const handleSignup = (req, res) => {
