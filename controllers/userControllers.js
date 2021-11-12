@@ -1,7 +1,10 @@
 const mongoose = require("mongoose");
 const User = require("../models/User");
 const fs = require("fs")
-const path = require("path")
+const path = require("path");
+const {
+    report
+} = require("../routes/locationRoutes");
 
 const getOneProfile = (req, res) => {
     console.log("Get one profile");
@@ -50,32 +53,50 @@ const modifyUserProfile = (req, res) => {
         });
 };
 
-const modifyAvatar = (req, res) => {
+const modifyAvatar = async (req, res) => {
     console.log("Modifying avatar");
-    if (!req.file) {
-        return res.status(400).json({
-            message: "Please provide an image",
-        });
-    }
-    User.updateOne({
-            _id: req.params.id,
+    try {
+        if (!req.file) {
+            const error = new Error('Please provide an image');
+            error.code = 400;
+            throw error;
+            // return res.status(400).json({
+            //     message: "Please provide an image",
+            // });
+        }
+        const oldUser = await User.findOneAndUpdate({
+            _id: req.params.id
         }, {
             $set: {
-                avatar: `/images/avatars/${req.file.filename}`,
+                avatar: `/images/avatars/${req.file.filename}`
             }
+        }, {
+            new: false
         })
-        .then(() => {
-            return res.status(200).json({
-                message: "Avatar modifié",
-            });
-        })
-        .catch((err) => {
-            console.error(err);
-            return res.status(500).json({
-                message: "L'avatar n'a pas pu être modifié",
-                error: err,
-            });
-        });
+        if (oldUser.avatar) {
+            const oldAvatar = path.join(__dirname, "../" + oldUser.avatar)
+            // console.log("oldAvatar", oldAvatar)
+            fs.unlink(oldAvatar, (err) => {
+                if (err) {
+                    throw err
+                }
+                return res.status(200).json({
+                    message: "Avatar modified"
+                })
+            })
+        } else {
+            res.status(200).json({
+                message: "Avatar modified"
+            })
+        }
+    } catch (err) {
+        console.error(err)
+        if (err.code === 400) {
+            return res.status(400).json(err.message)
+        }
+
+        return res.status(500).json(err)
+    }
 };
 
 const handleSignup = (req, res) => {
