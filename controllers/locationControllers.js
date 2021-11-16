@@ -56,7 +56,9 @@ const getLocationsOfUser = (req, res) => {
         })
         .then((locations) => {
             if (!locations) {
-                return res.status(404).json("Locations Introuvable");
+                return res.status(404).json({
+                    message: "Locations Introuvable"
+                });
             }
             return res.status(200).json({
                 message: "Locations foud",
