@@ -1,16 +1,14 @@
 const mongoose = require("mongoose");
 const User = require("../models/User");
-const fs = require("fs")
+const fs = require("fs");
 const path = require("path");
-const {
-    report
-} = require("../routes/locationRoutes");
+const { report } = require("../routes/locationRoutes");
 
 const getOneProfile = (req, res) => {
     console.log("Get one profile");
     User.findOne({
-            _id: req.params.id,
-        })
+        _id: req.params.id,
+    })
         .then((user) => {
             if (!user) {
                 return res.status(404).json({
@@ -33,11 +31,14 @@ const getOneProfile = (req, res) => {
 
 const modifyUserProfile = (req, res) => {
     console.log("Modifying profile");
-    User.findOneAndUpdate({
+    User.findOneAndUpdate(
+        {
             _id: req.params.id,
-        }, {
+        },
+        {
             ...req.body,
-        })
+        }
+    )
         .then((user) => {
             return res.status(200).json({
                 message: "User modifié",
@@ -57,56 +58,59 @@ const modifyAvatar = async (req, res) => {
     console.log("Modifying avatar");
     try {
         if (!req.file) {
-            const error = new Error('Please provide an image');
+            const error = new Error("Please provide an image");
             error.code = 400;
             throw error;
             // return res.status(400).json({
             //     message: "Please provide an image",
             // });
         }
-        const oldUser = await User.findOneAndUpdate({
-            _id: req.params.id
-        }, {
-            $set: {
-                avatar: `/images/avatars/${req.file.filename}`
+        const oldUser = await User.findOneAndUpdate(
+            {
+                _id: req.params.id,
+            },
+            {
+                $set: {
+                    avatar: `/images/avatars/${req.file.filename}`,
+                },
+            },
+            {
+                new: false,
             }
-        }, {
-            new: false
-        })
+        );
         if (oldUser.avatar) {
-            const oldAvatar = path.join(__dirname, "../" + oldUser.avatar)
+            const oldAvatar = path.join(__dirname, "../" + oldUser.avatar);
             // console.log("oldAvatar", oldAvatar)
             fs.unlink(oldAvatar, (err) => {
                 if (err) {
-                    throw err
+                    throw err;
                 }
                 return res.status(200).json({
-                    message: "Avatar modified"
-                })
-            })
+                    message: "Avatar modified",
+                });
+            });
         } else {
             res.status(200).json({
-                message: "Avatar modified"
-            })
+                message: "Avatar modified",
+            });
         }
     } catch (err) {
-        console.error(err)
+        console.error(err);
         if (err.code === 400) {
-            return res.status(400).json(err.message)
+            return res.status(400).json(err.message);
         }
 
-        return res.status(500).json(err)
+        return res.status(500).json(err);
     }
 };
 
 const handleSignup = (req, res) => {
-    console.log("Handle signup");
+    console.log("Handle signup", req.body);
     delete req.body.passwordConfirm;
     const user = new User({
         ...req.body,
     });
-    user
-        .save()
+    user.save()
         .then((user) => {
             return res.status(200).json({
                 message: "Utilisateur crée",
@@ -123,10 +127,10 @@ const handleSignup = (req, res) => {
 };
 
 const handleLogin = (req, res) => {
-    console.log("Handle login");
+    console.log("Handle login", req.body);
     User.findOne({
-            username: req.body.username,
-        })
+        username: req.body.username,
+    })
         .then((user) => {
             if (!user) {
                 return res.status(404).json({

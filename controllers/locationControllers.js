@@ -27,8 +27,8 @@ const getAllLocations = (req, res) => {
 const getOneLocation = (req, res) => {
     console.log("Get one location");
     Location.findOne({
-            _id: req.params.id,
-        })
+        _id: req.params.id,
+    })
         .then((location) => {
             if (!location) {
                 return res.status(404).json({
@@ -52,8 +52,8 @@ const getOneLocation = (req, res) => {
 const getLocationsOfUser = (req, res) => {
     console.log("Get locations of user");
     Location.find({
-            userId: req.params.userId,
-        })
+        userId: req.params.userId,
+    })
         .then((locations) => {
             if (!locations) {
                 return res.status(404).json("Locations Introuvable");
@@ -97,8 +97,8 @@ const getLocationsByType = (req, res) => {
             });
     } else {
         Location.find({
-                type: type
-            })
+            type: type,
+        })
             .then((locations) => {
                 if (!locations) {
                     return res.status(404).json("No location of this type");
@@ -118,7 +118,7 @@ const getLocationsByType = (req, res) => {
 };
 
 const createOneLocation = (req, res) => {
-    console.log("Creating Location");
+    console.log("Creating Location", req.body);
     const coordinatesObject = JSON.parse(req.body.coordinates);
     const type = req.body.type.split(" ").join().toLowerCase();
     delete req.body.coordinates;
@@ -131,36 +131,39 @@ const createOneLocation = (req, res) => {
     const imagesUrl = req.files.map(
         (file) => `/images/locations/${file.filename}`
     );
-    const location = new Location({
-        ...req.body,
-        coordinates: coordinatesObject,
-        type: type,
-        images: imagesUrl,
-    });
-    location
-        .save()
-        .then((location) => {
-            return res.status(200).json({
-                message: "Location crée",
-                location: location,
-            });
-        })
-        .catch((err) => {
-            console.log(err);
-            return res.status(500).json({
-                message: "La location n'a pas pu être crée",
-                error: err,
-            });
-        });
+    // const location = new Location({
+    //     ...req.body,
+    //     coordinates: coordinatesObject,
+    //     type: type,
+    //     images: imagesUrl,
+    // });
+    // location
+    //     .save()
+    //     .then((location) => {
+    //         return res.status(200).json({
+    //             message: "Location crée",
+    //             location: location,
+    //         });
+    //     })
+    //     .catch((err) => {
+    //         console.log(err);
+    //         return res.status(500).json({
+    //             message: "La location n'a pas pu être crée",
+    //             error: err,
+    //         });
+    //     });
 };
 
 const modifyOneLocation = (req, res) => {
     console.log("Modify Location");
-    Location.findOneAndUpdate({
+    Location.findOneAndUpdate(
+        {
             _id: req.params.id,
-        }, {
+        },
+        {
             ...req.body,
-        })
+        }
+    )
         .then((location) => {
             return res.status(200).json({
                 message: "Location modified",
@@ -179,8 +182,8 @@ const modifyOneLocation = (req, res) => {
 const deleteOneLocation = (req, res) => {
     console.log("Delete Location");
     Location.deleteOne({
-            _id: req.params.id,
-        })
+        _id: req.params.id,
+    })
         .then((location) => {
             if (!location) {
                 return res.status(404).json("Location not found");
@@ -199,14 +202,17 @@ const deleteOneLocation = (req, res) => {
         });
 };
 const commentOneLocation = (req, res) => {
-    console.log("Comment one location");
-    Location.findOneAndUpdate({
+    console.log("Comment one location", req.body);
+    Location.findOneAndUpdate(
+        {
             _id: req.params.id,
-        }, {
+        },
+        {
             $push: {
                 comments: req.body,
             },
-        })
+        }
+    )
         .then((location) => {
             return res.status(200).json({
                 message: "Comment saved",
