@@ -61,9 +61,6 @@ const modifyAvatar = async (req, res) => {
             const error = new Error("Please provide an image");
             error.code = 400;
             throw error;
-            // return res.status(400).json({
-            //     message: "Please provide an image",
-            // });
         }
         const oldUser = await User.findOneAndUpdate(
             {
