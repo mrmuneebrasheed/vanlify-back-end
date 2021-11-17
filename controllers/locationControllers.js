@@ -131,27 +131,27 @@ const createOneLocation = (req, res) => {
     const imagesUrl = req.files.map(
         (file) => `/images/locations/${file.filename}`
     );
-    // const location = new Location({
-    //     ...req.body,
-    //     coordinates: coordinatesObject,
-    //     type: type,
-    //     images: imagesUrl,
-    // });
-    // location
-    //     .save()
-    //     .then((location) => {
-    //         return res.status(200).json({
-    //             message: "Location crée",
-    //             location: location,
-    //         });
-    //     })
-    //     .catch((err) => {
-    //         console.log(err);
-    //         return res.status(500).json({
-    //             message: "La location n'a pas pu être crée",
-    //             error: err,
-    //         });
-    //     });
+    const location = new Location({
+        ...req.body,
+        coordinates: coordinatesObject,
+        type: type,
+        images: imagesUrl,
+    });
+    location
+        .save()
+        .then((location) => {
+            return res.status(200).json({
+                message: "Location crée",
+                location: location,
+            });
+        })
+        .catch((err) => {
+            console.log(err);
+            return res.status(500).json({
+                message: "La location n'a pas pu être crée",
+                error: err,
+            });
+        });
 };
 
 const modifyOneLocation = (req, res) => {
